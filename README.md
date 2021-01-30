@@ -10,3 +10,4 @@ Create todo list app
 - ELS Template
 - Run conditional JavaScript in EJS template
 - Passing data from webpage to server
+- Templating vs Layouts
