@@ -8,3 +8,4 @@ Course url: https://www.appbrewery.co/courses
 Create todo list app
 
 - ELS Template
+- Run conditional JavaScript in EJS template
