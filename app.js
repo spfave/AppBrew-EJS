@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date");
 
 
 // 
@@ -11,13 +12,11 @@ app.use(express.static("public"));
 
 
 // 
-let todos = ["Get snacks", "start TV", "Binge"];
-let workToDos = [];
+const todos = ["Get snacks", "start TV", "Binge"];
+const workToDos = [];
 
 app.get("/", (req, res) => {
-    let today = new Date();
-    let day = getDate(today);
-
+    let day = date.getDate();
     res.render("list", { listTitle: day, newToDos: todos });
 });
 
@@ -44,12 +43,3 @@ app.get("/about", (req, res) => {
 app.listen(process.env.port, () => {
     console.log(`Server running on port: ${process.env.port}`);
 });
-
-function getDate(date) {
-    const options = {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    };
-    return date.toLocaleDateString("en-US", options);
-}

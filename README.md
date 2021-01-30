@@ -11,3 +11,4 @@ Create todo list app
 - Run conditional JavaScript in EJS template
 - Passing data from webpage to server
 - Templating vs Layouts
+- Node module exports
