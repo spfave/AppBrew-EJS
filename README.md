@@ -6,3 +6,5 @@ Course url: https://www.appbrewery.co/courses
 ## Section 20 - Embedded JavaScript Templating (EJS)
 
 Create todo list app
+
+- ELS Template
