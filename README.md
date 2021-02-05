@@ -3,7 +3,7 @@
 Course: The Complete Web Development Bootcamp
 Course url: https://www.appbrewery.co/courses
 
-## Section 20 - Embedded JavaScript Templating (EJS)
+## Section 22 - Embedded JavaScript Templating (EJS)
 
 Create todo list app
 
@@ -12,3 +12,9 @@ Create todo list app
 - Passing data from webpage to server
 - Templating vs Layouts
 - Node module exports
+
+## Section 28 - Putting Everything Together
+
+Add MongoDB database for todo item storage
+
+-
