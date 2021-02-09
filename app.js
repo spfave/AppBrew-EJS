@@ -53,15 +53,18 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  const newItem = req.body.newItem;
+  const itemName = req.body.newItem;
+  const newItem = new Item({ name: itemName });
+  newItem.save();
 
-  if (req.body.list === "Work") {
-    workItems.push(newItem);
-    res.redirect("/work");
-  } else {
-    items.push(newItem);
-    res.redirect("/");
-  }
+  res.redirect("/");
+  // if (req.body.list === "Work") {
+  //   workItems.push(newItem);
+  //   res.redirect("/work");
+  // } else {
+  //   items.push(newItem);
+  //   res.redirect("/");
+  // }
 });
 
 app.get("/work", (req, res) => {
