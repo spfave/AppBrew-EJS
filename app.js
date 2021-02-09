@@ -15,6 +15,7 @@ mongoose.connect("mongodb://localhost:27017/todoListDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.set("useFindAndModify", false);
 
 const itemSchema = {
   name: String,
@@ -25,9 +26,6 @@ const item1 = new Item({ name: "Welcome to your todo list" });
 const item2 = new Item({ name: "Use the + button to add a new todo item" });
 const item3 = new Item({ name: "<-- check this to mark a todo complete" });
 const defaultItems = [item1, item2, item3];
-
-// const items = ["Get snacks", "start TV", "Binge"];
-// const workItems = [];
 
 // Routes
 app.get("/", (req, res) => {
@@ -64,7 +62,6 @@ app.post("/delete", (req, res) => {
   const checkedItemID = req.body.checkbox;
 
   Item.findByIdAndRemove(checkedItemID, (err) => {
-    console.log(err);
     if (!err) {
       console.log("Successfully deleted checked item");
     }
