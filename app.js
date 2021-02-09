@@ -58,13 +58,17 @@ app.post("/", (req, res) => {
   newItem.save();
 
   res.redirect("/");
-  // if (req.body.list === "Work") {
-  //   workItems.push(newItem);
-  //   res.redirect("/work");
-  // } else {
-  //   items.push(newItem);
-  //   res.redirect("/");
-  // }
+});
+
+app.post("/delete", (req, res) => {
+  const checkedItemID = req.body.checkbox;
+
+  Item.findByIdAndRemove(checkedItemID, (err) => {
+    console.log(err);
+    if (!err) {
+      console.log("Successfully deleted checked item");
+    }
+  });
 });
 
 app.get("/work", (req, res) => {
