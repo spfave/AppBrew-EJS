@@ -3,9 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 // const lodash = require("lodash");
 const mongoose = require("mongoose");
-// const date = require(__dirname + "/date");
 
-//
+// Setup
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,7 +49,6 @@ app.get("/", (req, res) => {
         });
         res.redirect("/");
       } else {
-        // const day = date.getDate();
         res.render("list", { listTitle: "Today", newListItems: foundItems });
       }
     }
@@ -106,13 +104,28 @@ app.post("/", (req, res) => {
 
 app.post("/delete", (req, res) => {
   const checkedItemID = req.body.checkbox;
+  const listName = req.body.listName;
 
-  Item.findByIdAndRemove(checkedItemID, (err) => {
-    if (!err) {
-      console.log("Successfully deleted checked item");
-      res.redirect("/");
-    }
-  });
+  if (listName === "Today") {
+    // Today todo list
+    Item.findByIdAndRemove(checkedItemID, (err) => {
+      if (!err) {
+        console.log("Successfully deleted checked item");
+        res.redirect("/");
+      }
+    });
+  } else {
+    // Custom todo list
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemID } } },
+      (err, foundList) => {
+        if (!err) {
+          res.redirect(`/${listName}`);
+        }
+      }
+    );
+  }
 });
 
 app.get("/about", (req, res) => {
