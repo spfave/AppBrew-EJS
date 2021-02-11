@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-// const lodash = require("lodash");
+const _ = require("lodash");
 const mongoose = require("mongoose");
 
 // Setup
@@ -56,7 +56,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/:customItemList", (req, res) => {
-  const customItemList = req.params.customItemList;
+  const customItemList = _.capitalize(req.params.customItemList);
 
   List.findOne({ name: customItemList }, (err, foundList) => {
     if (!err) {
@@ -93,7 +93,6 @@ app.post("/", (req, res) => {
     // Custom todo list
     List.findOne({ name: listName }, (err, foundList) => {
       if (!err) {
-        console.log("test test testing");
         foundList.items.push(newItem);
         foundList.save();
         res.redirect(`/${listName}`);
