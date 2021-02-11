@@ -64,6 +64,7 @@ app.post("/delete", (req, res) => {
   Item.findByIdAndRemove(checkedItemID, (err) => {
     if (!err) {
       console.log("Successfully deleted checked item");
+      res.redirect("/");
     }
   });
 });
