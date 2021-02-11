@@ -1,8 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+// const lodash = require("lodash");
 const mongoose = require("mongoose");
-const date = require(__dirname + "/date");
+// const date = require(__dirname + "/date");
 
 //
 const app = express();
@@ -27,6 +28,12 @@ const item2 = new Item({ name: "Use the + button to add a new todo item" });
 const item3 = new Item({ name: "<-- check this to mark a todo complete" });
 const defaultItems = [item1, item2, item3];
 
+const listSchema = {
+  name: String,
+  items: [itemSchema],
+};
+const List = mongoose.model("List", listSchema);
+
 // Routes
 app.get("/", (req, res) => {
   Item.find({}, (err, foundItems) => {
@@ -43,8 +50,32 @@ app.get("/", (req, res) => {
         });
         res.redirect("/");
       } else {
-        const day = date.getDate();
-        res.render("list", { listTitle: day, newListItems: foundItems });
+        // const day = date.getDate();
+        res.render("list", { listTitle: "Today", newListItems: foundItems });
+      }
+    }
+  });
+});
+
+app.get("/:customItemList", (req, res) => {
+  const customItemList = req.params.customItemList;
+
+  List.findOne({ name: customItemList }, (err, foundList) => {
+    if (!err) {
+      if (!foundList) {
+        // Create new list
+        const list = new List({
+          name: customItemList,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect(`/${customItemList}`);
+      } else {
+        // Show existing list
+        res.render("list", {
+          listTitle: foundList.name,
+          newListItems: foundList.items,
+        });
       }
     }
   });
@@ -52,10 +83,25 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const itemName = req.body.newItem;
-  const newItem = new Item({ name: itemName });
-  newItem.save();
+  const listName = req.body.listName;
 
-  res.redirect("/");
+  const newItem = new Item({ name: itemName });
+
+  if (listName === "Today") {
+    // Today todo list
+    newItem.save();
+    res.redirect("/");
+  } else {
+    // Custom todo list
+    List.findOne({ name: listName }, (err, foundList) => {
+      if (!err) {
+        console.log("test test testing");
+        foundList.items.push(newItem);
+        foundList.save();
+        res.redirect(`/${listName}`);
+      }
+    });
+  }
 });
 
 app.post("/delete", (req, res) => {
@@ -67,10 +113,6 @@ app.post("/delete", (req, res) => {
       res.redirect("/");
     }
   });
-});
-
-app.get("/work", (req, res) => {
-  res.render("list", { listTitle: "Work List", newListItems: workItems });
 });
 
 app.get("/about", (req, res) => {
